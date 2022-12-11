@@ -70,44 +70,74 @@ class Paciente:
         ArrayPriorityQueue.add(self.nivel, self.nome)
 
 pygame.init()
-window = pygame.display.set_mode((1000, 500))
+window = pygame.display.set_mode((1200, 500))
 
-# main application loop
+# loop
 run = True
-xx = 0
-yy = 200
+
 pq = ArrayPriorityQueue()
-fonte = pygame.font.SysFont('Comic Sans MS', 10, True, True)
 fila = pq
-gerar = True
 numfila = 0
 
+novo = False
+
 while run:
-
-    texto = f'Fila: {fila}'
-    texto_formatado = fonte.render(texto, True, (255, 255, 0))
-
-
 
     # event loop
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == K_SPACE:
+            if event.key == K_SPACE and numfila < 11:
                 posicao = random.randint(1, 500)
-                fila.add( posicao, names.get_first_name())
+                fila.add(posicao, names.get_first_name())
                 numfila = numfila + 1
             if event.key == K_TAB:
                 fila.remove_min()
+                numfila = numfila - 1
 
         if event.type == pygame.QUIT:
            exit()
 
-    # clear the display
-    window.fill(0)
+    def instrucoes():
+        texto3 = 'Pressione ESPAÇO para gerar um paciente'
+        tamfont3 = 25
+        fonte3 = pygame.font.SysFont('Arial ', tamfont3, True, True)
+        texto_formatado3 = fonte3.render(texto3, True, (255, 0, 255))
+        texto4 = 'Pressione TAB para enviar o paciente com maior prioridade para o atendimento'
+        texto_formatado4 = fonte3.render(texto4, True, (255, 0, 255))
+        window.blit(texto_formatado3, (350, 100))
+        window.blit(texto_formatado4, (150, 400))
 
-    # draw the scene
-    window.blit(texto_formatado, (0, 0))
-    pygame.display.flip()
+    def escreve():
+
+        tamfont = 15
+        fonte = pygame.font.SysFont('Arial ', tamfont, True, True)
+        texto = f'Fila: {fila}'
+        texto_formatado = fonte.render(texto, True, (255, 255, 0))
+        window.blit(texto_formatado, (0, 0))
+
+
+        textofila = f'Ultimo paciente chamado: {0}'
+        texto_formatadofila = fonte.render(textofila, True, (255, 255, 0))
+        window.blit(texto_formatadofila, (100,50))
+
+    def lotado():
+        if numfila >= 11:
+            texto2 = "A clínica está cheia. Espere um paciente ser atendido para cadastrar outro no sistema"
+            tamfont2 = 20
+            fonte = pygame.font.SysFont('Arial ', tamfont2, True, True)
+            texto_formatado2 = fonte.render(texto2, True, (255, 255, 0))
+            window.blit(texto_formatado2, (200, 200))
+    # limpa display
+    window.fill(0)
+    # escrever
+    escreve()
+    instrucoes()
+    lotado()
+
+
+
+
+    pygame.display.update()
 
 
 
